@@ -8,7 +8,7 @@ namespace GoogleTTS
 {
     public class gTTS
     {
-        private const ushort TokenLenght = 175;
+        private const ushort TokenLength = 175;
         private const string TtsUrl = "https://translate.google.com/translate_tts";
         private const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.17763";
 
@@ -20,7 +20,7 @@ namespace GoogleTTS
 
             foreach (var str in strings)
             {
-                if (str.Length < TokenLenght)
+                if (str.Length < TokenLength)
                     downloadByteArray(str, lang);
                 else
                 {
@@ -28,9 +28,9 @@ namespace GoogleTTS
 
                     do
                     {
-                        ushort index = TokenLenght;
+                        ushort index = TokenLength;
 
-                        for (ushort i = TokenLenght; i > 0; i--)
+                        for (ushort i = TokenLength; i > 0; i--)
                             if (tmpStr[i] == ',')
                             {
                                 index = i;
@@ -39,7 +39,7 @@ namespace GoogleTTS
 
                         downloadByteArray(tmpStr.Substring(0, index), lang);
                         tmpStr = tmpStr.Remove(0, index);
-                    } while (tmpStr.Length > TokenLenght);
+                    } while (tmpStr.Length > TokenLength);
 
                     downloadByteArray(tmpStr, lang);
                 }
