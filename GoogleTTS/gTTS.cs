@@ -51,8 +51,6 @@ namespace GoogleTTS
             if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
                 return;
 
-            System.Console.WriteLine(text);
-
             using (var webClient = new WebClient())
             {
                 webClient.Headers.Add("user-agent", UserAgent);
