@@ -1,56 +1,29 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
-
-namespace GoogleTTS
+namespace TelegramTest
 {
     public class gTTS
     {
-        private const ushort TokenLength = 175;
         private const string TtsUrl = "https://translate.google.com/translate_tts";
         private const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.17763";
 
+        private const ushort MaxTokenLength = 175;
+
         private List<byte[]> byteList = new List<byte[]>();
 
-        public gTTS(string text, string lang)
+        private string lang;
+
+        public gTTS(string text, string language)
         {
-            var strings = Regex.Split(text, "[!?.\n]");
-
-            foreach (var str in strings)
-            {
-                if (str.Length < TokenLength)
-                    downloadByteArray(str, lang);
-                else
-                {
-                    var tmpStr = str;
-
-                    do
-                    {
-                        ushort index = TokenLength;
-
-                        for (ushort i = TokenLength; i > 0; i--)
-                            if (tmpStr[i] == ',')
-                            {
-                                index = i;
-                                break;
-                            }
-
-                        downloadByteArray(tmpStr.Substring(0, index), lang);
-                        tmpStr = tmpStr.Remove(0, index);
-                    } while (tmpStr.Length > TokenLength);
-
-                    downloadByteArray(tmpStr, lang);
-                }
-            }
+            lang = language;
+            tokenizer(text);
         }
 
-        private void downloadByteArray(string text, string lang)
+        private void downloadByteArray(string text)
         {
-            if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
-                return;
-
             using (var webClient = new WebClient())
             {
                 webClient.Headers.Add("user-agent", UserAgent);
@@ -79,6 +52,58 @@ namespace GoogleTTS
                     fileStream.Close();
                 }
             }
+        }
+
+        private void tokenizer(string text)
+        {
+            var strings = text.Split(new[] { '!', '?', '.', ';', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var str in strings)
+            {
+                if (str.Length <= MaxTokenLength)
+                    downloadByteArray(str);
+                else
+                    tokenizer2ndLevel(str);
+            }
+        }
+
+        private void tokenizer2ndLevel(string text)
+        {
+            var strings = text.Split(new[] { ':', ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var str in strings)
+            {
+                if (str.Length <= MaxTokenLength)
+                    downloadByteArray(str);
+                else
+                    tokenizer3rdLevel(str);
+            }
+        }
+
+        private void tokenizer3rdLevel(string text)
+        {
+            var strings = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var str in strings)
+            {
+                if (str.Length <= MaxTokenLength)
+                    downloadByteArray(str);
+                else
+                    tokenizer4thLevel(str);
+            }
+        }
+
+        private void tokenizer4thLevel(string text)
+        {
+            string tmpStr = String.Copy(text);
+
+            do
+            {
+                downloadByteArray(tmpStr.Substring(0, MaxTokenLength));
+                tmpStr = tmpStr.Remove(0, MaxTokenLength);
+            } while (tmpStr.Length > MaxTokenLength);
+
+            downloadByteArray(tmpStr);
         }
     }
 }
