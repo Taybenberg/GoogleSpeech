@@ -19,7 +19,11 @@ namespace TelegramTest
         public gTTS(string text, string language)
         {
             lang = language;
-            tokenizer(text);
+
+            if (text.Length <= MaxTokenLength)
+                downloadByteArray(text);
+            else
+                tokenizer(text);
         }
 
         private void downloadByteArray(string text)
