@@ -60,54 +60,35 @@ namespace TelegramTest
 
         private void tokenizer(string text)
         {
-            var strings = text.Split(new[] { '!', '?', '.', ';', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var str in strings)
+            foreach (var str0 in text.Split(new[] { '!', '?', '.', ';', '\n' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                if (str.Length <= MaxTokenLength)
-                    downloadByteArray(str);
+                if (str0.Length <= MaxTokenLength)
+                    downloadByteArray(str0);
                 else
-                    tokenizer2ndLevel(str);
+                    foreach (var str1 in str0.Split(new[] { ':', ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        if (str1.Length <= MaxTokenLength)
+                            downloadByteArray(str1);
+                        else
+                            foreach (var str2 in str1.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                if (str2.Length <= MaxTokenLength)
+                                    downloadByteArray(str2);
+                                else
+                                {
+                                    var str3 = str2;
+
+                                    do
+                                    {
+                                        downloadByteArray(str3.Substring(0, MaxTokenLength));
+                                        str3 = str3.Remove(0, MaxTokenLength);
+                                    } while (str3.Length > MaxTokenLength);
+
+                                    downloadByteArray(str3);
+                                }
+                            }
+                    }
             }
-        }
-
-        private void tokenizer2ndLevel(string text)
-        {
-            var strings = text.Split(new[] { ':', ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var str in strings)
-            {
-                if (str.Length <= MaxTokenLength)
-                    downloadByteArray(str);
-                else
-                    tokenizer3rdLevel(str);
-            }
-        }
-
-        private void tokenizer3rdLevel(string text)
-        {
-            var strings = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var str in strings)
-            {
-                if (str.Length <= MaxTokenLength)
-                    downloadByteArray(str);
-                else
-                    tokenizer4thLevel(str);
-            }
-        }
-
-        private void tokenizer4thLevel(string text)
-        {
-            string tmpStr = String.Copy(text);
-
-            do
-            {
-                downloadByteArray(tmpStr.Substring(0, MaxTokenLength));
-                tmpStr = tmpStr.Remove(0, MaxTokenLength);
-            } while (tmpStr.Length > MaxTokenLength);
-
-            downloadByteArray(tmpStr);
         }
     }
 }
