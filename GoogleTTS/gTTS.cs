@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Collections.Generic;
 
 public class gTTS
@@ -45,8 +46,7 @@ public class gTTS
         {
             using (var binaryWriter = new BinaryWriter(fileStream))
             {
-                foreach (var bytes in byteList)
-                    binaryWriter.Write(bytes);
+                binaryWriter.Write(ToByteArray());
 
                 binaryWriter.Flush();
                 binaryWriter.Close();
@@ -54,6 +54,19 @@ public class gTTS
                 fileStream.Close();
             }
         }
+    }
+
+    public byte[] ToByteArray()
+    {
+        byte[] arr = null;
+
+        foreach (var b in byteList)
+            if (arr == null)
+                arr = b;
+            else
+                arr.Concat(b);
+
+        return arr;
     }
 
     private void tokenizer(string text)
