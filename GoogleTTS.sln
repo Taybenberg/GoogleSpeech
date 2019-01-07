@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleTTS", "GoogleTTS\GoogleTTS.csproj", "{EEFCE6C4-3354-4549-BFFA-1C299CFBC48D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csGoogleTTS", "GoogleTTS\csGoogleTTS.csproj", "{EEFCE6C4-3354-4549-BFFA-1C299CFBC48D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cGoogleTTS", "cGoogleTTS\cGoogleTTS.vcxproj", "{007110B1-EBDB-4445-9B95-C476ED58F036}"
 EndProject
