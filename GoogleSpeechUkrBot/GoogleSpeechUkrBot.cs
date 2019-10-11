@@ -32,9 +32,10 @@ namespace GoogleSpeechUkrBot
 
                     if (!string.IsNullOrEmpty(url))
                     {
-                        var inline = new InlineQueryResultVoice[1];
-
-                        inline[0] = new InlineQueryResultVoice("0", url, iqea.InlineQuery.Query);
+                        var inline = new InlineQueryResultVoice[]
+                        {
+                            new InlineQueryResultVoice("0", url, iqea.InlineQuery.Query)
+                        };
 
                         await Bot.AnswerInlineQueryAsync(iqea.InlineQuery.Id, inline);
                     }
