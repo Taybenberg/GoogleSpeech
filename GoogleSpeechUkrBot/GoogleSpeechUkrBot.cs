@@ -54,12 +54,12 @@ namespace GoogleSpeechUkrBot
                 {
                     try
                     {
-                        var gSTT = new GoogleSTT.gSTT($"https://api.telegram.org/file/bot{TelegramApiToken}/{Bot.GetFileAsync(message.Voice.FileId).Result.FilePath}", 48000);
+                        var gSTT = new GoogleSTT.gSTT($"https://api.telegram.org/file/bot{TelegramApiToken}/{Bot.GetFileAsync(message.Voice.FileId).Result.FilePath}");
                         await Bot.SendTextMessageAsync(message.Chat.Id, gSTT.Result, replyToMessageId: message.MessageId);
                     }
                     catch (Exception ex)
                     {
-                        await Bot.SendTextMessageAsync(message.Chat.Id, "Не вдалося розпізнати повідомлення.", replyToMessageId: message.MessageId);
+                        await Bot.SendTextMessageAsync(message.Chat.Id, "Не вдалося розпізнати повідомлення. Спробуйте з іншого пристрою або змініть частоту дискретизації запису на 48000 Гц", replyToMessageId: message.MessageId);
                     }
                 }
                 else if (mea.Message.Type == MessageType.Text)
@@ -82,7 +82,14 @@ namespace GoogleSpeechUkrBot
                             break;
 
                         default:
-                            await Bot.SendVoiceAsync(ChatId, new InputFileStream(new MemoryStream(new GoogleTTS.gTTS(command).ToByteArray())).Content, replyToMessageId: message.MessageId);
+                            try
+                            {
+                                await Bot.SendVoiceAsync(ChatId, new InputFileStream(new MemoryStream(new GoogleTTS.gTTS(command).ToByteArray())).Content, replyToMessageId: message.MessageId);
+                            }
+                            catch
+                            {
+                                await Bot.SendTextMessageAsync(message.Chat.Id, "Під час синтезу мовлення виникла помилка.", replyToMessageId: message.MessageId);
+                            }
                             break;
                     }
                 }

@@ -16,7 +16,7 @@ namespace GoogleSTT
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
         }
 
-        public gSTT(string speechURI, int sampleRateHertz, string languageCode = "uk-UA", RecognitionConfig.Types.AudioEncoding audioEncoding = RecognitionConfig.Types.AudioEncoding.OggOpus)
+        public gSTT(string speechURI, int sampleRateHertz = 48000, string languageCode = "uk-UA", RecognitionConfig.Types.AudioEncoding audioEncoding = RecognitionConfig.Types.AudioEncoding.OggOpus)
         {
             var speech = SpeechClient.Create();
 
