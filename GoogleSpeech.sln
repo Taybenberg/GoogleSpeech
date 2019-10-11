@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleTTS", "GoogleTTS\GoogleTTS.csproj", "{6ED3E9D6-CB73-421E-AF18-42492FED9C4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleSTT", "GoogleSTT\GoogleSTT.csproj", "{1B80A34E-F05A-404D-A7AE-D5A96D6C6E0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSTT", "GoogleSTT\GoogleSTT.csproj", "{1B80A34E-F05A-404D-A7AE-D5A96D6C6E0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleSpeechUkrBot", "GoogleSpeechUkrBot\GoogleSpeechUkrBot.csproj", "{CC2BD139-7145-4780-BE83-9A9D5C1A3577}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleSpeechUkrBotRunner", "GoogleSpeechUkrBotRunner\GoogleSpeechUkrBotRunner.csproj", "{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{1B80A34E-F05A-404D-A7AE-D5A96D6C6E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B80A34E-F05A-404D-A7AE-D5A96D6C6E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B80A34E-F05A-404D-A7AE-D5A96D6C6E0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC2BD139-7145-4780-BE83-9A9D5C1A3577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC2BD139-7145-4780-BE83-9A9D5C1A3577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC2BD139-7145-4780-BE83-9A9D5C1A3577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC2BD139-7145-4780-BE83-9A9D5C1A3577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,4 +8,23 @@
     <PackageReference Include="Google.Cloud.Speech.V1" Version="1.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="GoogleCloudJson.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GoogleCloudJson.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="GoogleCloudJson.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GoogleCloudJson.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>

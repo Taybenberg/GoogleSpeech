@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Google.Cloud.Speech.V1;
 
 namespace GoogleSTT
@@ -6,6 +7,14 @@ namespace GoogleSTT
     public class gSTT
     {
         public string Result { get; private set; }
+
+        static gSTT()
+        {
+            string path = Path.GetTempPath() + @"\Google.json";
+            File.WriteAllBytes(path, GoogleCloudJson.Google);
+
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
+        }
 
         public gSTT(string speechURI, int sampleRateHertz, string languageCode = "uk-UA", RecognitionConfig.Types.AudioEncoding audioEncoding = RecognitionConfig.Types.AudioEncoding.OggOpus)
         {
