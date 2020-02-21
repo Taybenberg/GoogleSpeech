@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  googlespeechukrbotrunner:
+    image: ${DOCKER_REGISTRY-}googlespeechukrbotrunner
+    build:
+      context: .
+      dockerfile: GoogleSpeechUkrBotRunner/Dockerfile
