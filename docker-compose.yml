@@ -6,3 +6,10 @@ services:
     build:
       context: .
       dockerfile: GoogleSpeechUkrBotRunner/Dockerfile
+
+  googlespeechukrbotworker:
+    image: ${DOCKER_REGISTRY-}googlespeechukrbotworker
+    build:
+      context: .
+      dockerfile: GoogleSpeechUkrBotWorker/Dockerfile
+

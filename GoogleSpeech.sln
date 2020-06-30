@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSTT", "GoogleSTT\Goog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSpeechUkrBot", "GoogleSpeechUkrBot\GoogleSpeechUkrBot.csproj", "{CC2BD139-7145-4780-BE83-9A9D5C1A3577}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleSpeechUkrBotRunner", "GoogleSpeechUkrBotRunner\GoogleSpeechUkrBotRunner.csproj", "{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BDD69296-6877-4820-8DAC-196A3554EC3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleSpeechUkrBotWorker", "GoogleSpeechUkrBotWorker\GoogleSpeechUkrBotWorker.csproj", "{B42E484D-0943-44D6-969C-4802EB045993}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +31,14 @@ Global
 		{CC2BD139-7145-4780-BE83-9A9D5C1A3577}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC2BD139-7145-4780-BE83-9A9D5C1A3577}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC2BD139-7145-4780-BE83-9A9D5C1A3577}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F065D86-CA83-4C16-8E1A-94A30AEC8E52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BDD69296-6877-4820-8DAC-196A3554EC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BDD69296-6877-4820-8DAC-196A3554EC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDD69296-6877-4820-8DAC-196A3554EC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDD69296-6877-4820-8DAC-196A3554EC3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B42E484D-0943-44D6-969C-4802EB045993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B42E484D-0943-44D6-969C-4802EB045993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B42E484D-0943-44D6-969C-4802EB045993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B42E484D-0943-44D6-969C-4802EB045993}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

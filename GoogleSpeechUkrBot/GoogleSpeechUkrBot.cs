@@ -11,17 +11,19 @@ namespace GoogleSpeechUkrBot
 {
     public class GoogleSpeechUkrBot
     {
-        readonly string TelegramApiToken;
+        private TelegramBotClient bot;
+
+        public void Start() => bot.StartReceiving();
+
+        public void Stop() => bot.StopReceiving();
 
         public GoogleSpeechUkrBot(string TelegramApiToken)
         {
-            this.TelegramApiToken = TelegramApiToken;
+            bot = new TelegramBotClient(TelegramApiToken);
 
-            var Bot = new TelegramBotClient(TelegramApiToken);
+            bot.SetWebhookAsync("");
 
-            Bot.SetWebhookAsync("");
-
-            Bot.OnInlineQuery += async (object updobj, InlineQueryEventArgs iqea) =>
+            bot.OnInlineQuery += async (object updobj, InlineQueryEventArgs iqea) =>
             {
                 try
                 {
@@ -37,7 +39,7 @@ namespace GoogleSpeechUkrBot
                             new InlineQueryResultVoice("0", url, iqea.InlineQuery.Query)
                         };
 
-                        await Bot.AnswerInlineQueryAsync(iqea.InlineQuery.Id, inline);
+                        await bot.AnswerInlineQueryAsync(iqea.InlineQuery.Id, inline);
                     }
                 }
                 catch (Exception ex)
@@ -46,7 +48,7 @@ namespace GoogleSpeechUkrBot
                 }
             };
 
-            Bot.OnMessage += async (object updobj, MessageEventArgs mea) =>
+            bot.OnMessage += async (object updobj, MessageEventArgs mea) =>
             {
                 var message = mea.Message;
 
@@ -54,12 +56,12 @@ namespace GoogleSpeechUkrBot
                 {
                     try
                     {
-                        var gSTT = new GoogleSTT.gSTT($"https://api.telegram.org/file/bot{TelegramApiToken}/{Bot.GetFileAsync(message.Voice.FileId).Result.FilePath}");
-                        await Bot.SendTextMessageAsync(message.Chat.Id, gSTT.Result, replyToMessageId: message.MessageId);
+                        var gSTT = new GoogleSTT.gSTT($"https://api.telegram.org/file/bot{TelegramApiToken}/{bot.GetFileAsync(message.Voice.FileId).Result.FilePath}");
+                        await bot.SendTextMessageAsync(message.Chat.Id, gSTT.Result, replyToMessageId: message.MessageId);
                     }
                     catch (Exception ex)
                     {
-                        await Bot.SendTextMessageAsync(message.Chat.Id, "Не вдалося розпізнати повідомлення. Спробуйте з іншого пристрою або змініть частоту дискретизації запису на 48000 Гц", replyToMessageId: message.MessageId);
+                        await bot.SendTextMessageAsync(message.Chat.Id, "Не вдалося розпізнати повідомлення. Спробуйте з іншого пристрою або змініть частоту дискретизації запису на 48000 Гц", replyToMessageId: message.MessageId);
                     }
                 }
                 else if (mea.Message.Type == MessageType.Text)
@@ -74,28 +76,26 @@ namespace GoogleSpeechUkrBot
                     switch (command)
                     {
                         case "start":
-                            await Bot.SendTextMessageAsync(ChatId, "Вітаю! Я @GoogleSpeechUkrBot!\nНадішліть мені текстове повідомлення, щоб синтезувати мовлення, або надішліть голосове повідомлення, щоб розпізнати мовлення.\nНатисніть '/', щоби обрати команду.");
+                            await bot.SendTextMessageAsync(ChatId, "Вітаю! Я @GoogleSpeechUkrBot!\nНадішліть мені текстове повідомлення, щоб синтезувати мовлення, або надішліть голосове повідомлення, щоб розпізнати мовлення.\nНатисніть '/', щоби обрати команду.");
                             break;
 
                         case "sendvoice":
-                            await Bot.SendTextMessageAsync(ChatId, "Натисніть кнопку та оберіть чат до якого хочете надіслати фразу.", replyMarkup: new InlineKeyboardMarkup(new[] { InlineKeyboardButton.WithSwitchInlineQuery("Надіслати") }));
+                            await bot.SendTextMessageAsync(ChatId, "Натисніть кнопку та оберіть чат до якого хочете надіслати фразу.", replyMarkup: new InlineKeyboardMarkup(new[] { InlineKeyboardButton.WithSwitchInlineQuery("Надіслати") }));
                             break;
 
                         default:
                             try
                             {
-                                await Bot.SendVoiceAsync(ChatId, new InputFileStream(new MemoryStream(new GoogleTTS.gTTS(command).ToByteArray())).Content, replyToMessageId: message.MessageId);
+                                await bot.SendVoiceAsync(ChatId, new InputFileStream(new MemoryStream(new GoogleTTS.gTTS(command).ToByteArray())).Content, replyToMessageId: message.MessageId);
                             }
                             catch
                             {
-                                await Bot.SendTextMessageAsync(message.Chat.Id, "Під час синтезу мовлення виникла помилка.", replyToMessageId: message.MessageId);
+                                await bot.SendTextMessageAsync(message.Chat.Id, "Під час синтезу мовлення виникла помилка.", replyToMessageId: message.MessageId);
                             }
                             break;
                     }
                 }
             };
-
-            Bot.StartReceiving();
         }
     }
 }
