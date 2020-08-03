@@ -61,7 +61,7 @@ namespace GoogleSpeechUkrBot
                     }
                     catch (Exception ex)
                     {
-                        await bot.SendTextMessageAsync(message.Chat.Id, "Не вдалося розпізнати повідомлення. Спробуйте з іншого пристрою або змініть частоту дискретизації запису на 48000 Гц", replyToMessageId: message.MessageId);
+                        await bot.SendTextMessageAsync(message.Chat.Id, $"Не вдалося розпізнати повідомлення. Помилка: {ex.Message}", replyToMessageId: message.MessageId);
                     }
                 }
                 else if (mea.Message.Type == MessageType.Text)
