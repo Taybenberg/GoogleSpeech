@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using Google.Cloud.Speech.V1;
 
 namespace GoogleSTT
@@ -8,25 +9,28 @@ namespace GoogleSTT
     {
         public string Result { get; private set; }
 
-        static gSTT()
+        public gSTT(string speechURI, string languageCode = LanguageCodes.Ukrainian.Ukraine, RecognitionConfig.Types.AudioEncoding audioEncoding = RecognitionConfig.Types.AudioEncoding.OggOpus)
         {
-            string path = Path.GetTempPath() + @"\Google.json";
-            File.WriteAllBytes(path, GoogleCloudJson.Google);
+            string path = $"{Path.GetTempFileName()}.oga";
 
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
-        }
+            using (var client = new WebClient())
+            {
+                client.DownloadFile(speechURI, path);
+            }
 
-        public gSTT(string speechURI, int sampleRateHertz = 48000, string languageCode = "uk-UA", RecognitionConfig.Types.AudioEncoding audioEncoding = RecognitionConfig.Types.AudioEncoding.OggOpus)
-        {
+            int sampleRateHertz = TagLib.File.Create(path).Properties.AudioSampleRate;
+
             var speech = SpeechClient.Create();
-
+            
             var response = speech.Recognize(new RecognitionConfig()
             {
                 Encoding = audioEncoding,
                 SampleRateHertz = sampleRateHertz,
                 LanguageCode = languageCode,
                 EnableAutomaticPunctuation = true,
-            }, RecognitionAudio.FetchFromUri(speechURI));
+            }, RecognitionAudio.FromFile(path));
+
+            File.Delete(path);
 
             Result = string.Empty;
 
