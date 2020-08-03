@@ -17,18 +17,18 @@ namespace GoogleSpeechUkrBotWorker
         public Worker()
         {
             /*  
-             *  Хостинг AppHarbor записує конфігураційні змінні до файлу .config, 
-             *  який більше не використовується в .Net Core
-             *  Через це доводиться діставати токен за допомогою Regex-виразу
+             *  РҐРѕСЃС‚РёРЅРі AppHarbor Р·Р°РїРёСЃСѓС” РєРѕРЅС„С–РіСѓСЂР°С†С–Р№РЅС– Р·РјС–РЅРЅС– РґРѕ С„Р°Р№Р»Сѓ .config, 
+             *  СЏРєРёР№ Р±С–Р»СЊС€Рµ РЅРµ РІРёРєРѕСЂРёСЃС‚РѕРІСѓС”С‚СЊСЃСЏ РІ .Net Core
+             *  Р§РµСЂРµР· С†Рµ РґРѕРІРѕРґРёС‚СЊСЃСЏ РґС–СЃС‚Р°РІР°С‚Рё С‚РѕРєРµРЅ Р·Р° РґРѕРїРѕРјРѕРіРѕСЋ Regex-РІРёСЂР°Р·Сѓ
              */
+
+            string path = Path.GetTempFileName();
 
             var text = File.ReadAllText("GoogleSpeechUkrBotWorker.dll.config");
 
             var match = Regex.Match(text, "\"GoogleApplicationCredentials\" value=\"({.+})\"");
 
-            string path = Path.Combine(Path.GetTempPath(), "Google.json");
-
-            File.WriteAllText(path, match.Groups[1].Value);
+            File.WriteAllText(path, match.Groups[1].Value.Replace(@"&quot;", "\""));
 
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
