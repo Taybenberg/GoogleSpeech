@@ -26,15 +26,11 @@ namespace GoogleSpeechUkrBotWorker
 
             var text = File.ReadAllText("GoogleSpeechUkrBotWorker.dll.config");
 
-            var match = Regex.Match(text, "\"GoogleApplicationCredentials\" value=\"({.+})\"");
-
-            File.WriteAllText(path, match.Groups[1].Value.Replace(@"&quot;", "\""));
+            File.WriteAllText(path, Regex.Match(text, "\"GoogleApplicationCredentials\" value=\"({.+})\"").Groups[1].Value.Replace(@"&quot;", "\""));
 
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
-            match = Regex.Match(text, "\"TelegramBotApiToken\" value=\"(.+)\"");
-
-            bot = new GoogleSpeechUkrBot.GoogleSpeechUkrBot(match.Groups[1].Value);
+            bot = new GoogleSpeechUkrBot.GoogleSpeechUkrBot(Regex.Match(text, "\"TelegramBotApiToken\" value=\"(.+)\"").Groups[1].Value, Regex.Match(text, "\"SQLSERVER_CONNECTION_STRING\" value=\"(.+)\"").Groups[1].Value);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

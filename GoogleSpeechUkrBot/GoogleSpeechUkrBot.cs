@@ -17,8 +17,10 @@ namespace GoogleSpeechUkrBot
 
         public void Stop() => bot.StopReceiving();
 
-        public GoogleSpeechUkrBot(string TelegramApiToken)
+        public GoogleSpeechUkrBot(string TelegramApiToken, string ConnectionString)
         {
+            var userSettings = new UserSettings(ConnectionString);
+
             bot = new TelegramBotClient(TelegramApiToken);
 
             bot.SetWebhookAsync("");
@@ -52,7 +54,7 @@ namespace GoogleSpeechUkrBot
             {
                 var message = mea.Message;
 
-                if (message.Type == MessageType.Voice)
+                if (message.Type == MessageType.Voice && userSettings.GetVoice(message.Chat.Id))
                 {
                     try
                     {
@@ -71,7 +73,7 @@ namespace GoogleSpeechUkrBot
 
                     var ChatId = message.Chat.Id;
 
-                    string command = message.Text.ToLower().Replace("@googlespeechukrbot", "").Replace("/", "");
+                    var command = message.Text.ToLower().Replace("@googlespeechukrbot", "").Replace("/", "");
 
                     switch (command)
                     {
@@ -83,14 +85,37 @@ namespace GoogleSpeechUkrBot
                             await bot.SendTextMessageAsync(ChatId, "Оберіть чат, до якого хочете надіслати голосове повідомлення.", replyMarkup: new InlineKeyboardMarkup(new[] { InlineKeyboardButton.WithSwitchInlineQuery("Надіслати") }));
                             break;
 
+                        case "voiceon":
+                            userSettings.ManageVoice(ChatId, true);
+                            await bot.SendTextMessageAsync(message.Chat.Id, "Увімкнено розпізнавання мовлення у цьому чаті.", replyToMessageId: message.MessageId);
+                            break;
+
+                        case "voiceoff":
+                            userSettings.ManageVoice(ChatId, false);
+                            await bot.SendTextMessageAsync(message.Chat.Id, "Вимкнено розпізнавання мовлення у цьому чаті.", replyToMessageId: message.MessageId);
+                            break;
+
+                        case "texton":
+                            userSettings.ManageText(ChatId, true);
+                            await bot.SendTextMessageAsync(message.Chat.Id, "Увімкнено синтез мовлення у цьому чаті.", replyToMessageId: message.MessageId);
+                            break;
+
+                        case "textoff":
+                            userSettings.ManageText(ChatId, false);
+                            await bot.SendTextMessageAsync(message.Chat.Id, "Вимкнено синтез мовлення у цьому чаті.", replyToMessageId: message.MessageId);
+                            break;
+
                         default:
-                            try
+                            if (userSettings.GetText(message.Chat.Id))
                             {
-                                await bot.SendVoiceAsync(ChatId, new InputFileStream(new MemoryStream(new GoogleTTS.gTTS(command).ToByteArray())).Content, replyToMessageId: message.MessageId);
-                            }
-                            catch
-                            {
-                                await bot.SendTextMessageAsync(message.Chat.Id, "Під час синтезу мовлення виникла помилка.", replyToMessageId: message.MessageId);
+                                try
+                                {
+                                    await bot.SendVoiceAsync(ChatId, new InputFileStream(new MemoryStream(new GoogleTTS.gTTS(command).ToByteArray())).Content, replyToMessageId: message.MessageId);
+                                }
+                                catch
+                                {
+                                    await bot.SendTextMessageAsync(message.Chat.Id, "Під час синтезу мовлення виникла помилка.", replyToMessageId: message.MessageId);
+                                }
                             }
                             break;
                     }
