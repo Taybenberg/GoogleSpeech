@@ -11,26 +11,20 @@ namespace GoogleSTT
 
         public gSTT(string speechURI, string languageCode = LanguageCodes.Ukrainian.Ukraine, RecognitionConfig.Types.AudioEncoding audioEncoding = RecognitionConfig.Types.AudioEncoding.OggOpus)
         {
-            string path = $"{Path.GetTempFileName()}.oga";
+            byte[] data;
 
             using (var client = new WebClient())
             {
-                client.DownloadFile(speechURI, path);
+                data = client.DownloadData(speechURI);
             }
 
-            int sampleRateHertz = TagLib.File.Create(path).Properties.AudioSampleRate;
-
-            var speech = SpeechClient.Create();
-            
-            var response = speech.Recognize(new RecognitionConfig()
+            var response = SpeechClient.Create().Recognize(new RecognitionConfig()
             {
                 Encoding = audioEncoding,
-                SampleRateHertz = sampleRateHertz,
+                SampleRateHertz = new TagLibFileAbstraction(speechURI, data).AudioSampleRate,
                 LanguageCode = languageCode,
                 EnableAutomaticPunctuation = true,
-            }, RecognitionAudio.FromFile(path));
-
-            File.Delete(path);
+            }, RecognitionAudio.FromBytes(data));
 
             Result = string.Empty;
 
